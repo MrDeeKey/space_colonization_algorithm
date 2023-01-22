@@ -1,7 +1,11 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
 
-main() {
+import 'package:space_colonization_algorithm/world.dart';
+
+import 'game.dart';
+
+main() async {
   runApp(const MyApp());
 }
 
@@ -27,11 +31,11 @@ class MyPage extends StatefulWidget {
 class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
-  World world = World(0.0, 0.0);
+  World world = World();
   final DateTime _initialTime = DateTime.now();
   double previous = 0.0;
-  double pointerx = 0;
-  double pointery = 0;
+  double pointerx = (ui.window.physicalSize / ui.window.devicePixelRatio).width / 2;
+  double pointery = (ui.window.physicalSize / ui.window.devicePixelRatio).height / 2;
   double get currentTime => DateTime.now().difference(_initialTime).inMilliseconds / 1000.0;
 
   @override
@@ -49,11 +53,13 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
             var dt = curr - previous;
             previous = curr;
 
-            return CustomPaint(
-              size: MediaQuery.of(context).size,
-              painter: MyGame(world, pointerx, pointery, dt),
-              child: const Center(
-                child: Text('This is your UI'),
+            return ClipRect(
+              child: CustomPaint(
+                size: MediaQuery.of(context).size,
+                painter: MyGame(world, pointerx, pointery, dt),
+                child: const Center(
+                  child: null,
+                ),
               ),
             );
           },
@@ -73,55 +79,5 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
   void pointerUpdate(details) {
     pointerx = details.globalPosition.dx;
     pointery = details.globalPosition.dy;
-  }
-}
-
-class MyGame extends CustomPainter {
-  final World world;
-  final double x;
-  final double y;
-  final double t;
-
-  MyGame(this.world, this.x, this.y, this.t);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    world.input(x, y);
-    world.update(t);
-    world.render(t, canvas);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => true;
-}
-
-class World {
-  var _turn = 0.0;
-  double _x;
-  double _y;
-
-  World(this._x, this._y);
-
-  void input(double x, double y) {
-    _x = x;
-    _y = y;
-  }
-
-  void render(double t, Canvas canvas) {
-    var tau = math.pi * 2;
-
-    canvas.drawPaint(Paint()..color = const Color.fromARGB(255, 47, 44, 50));
-    canvas.save();
-    canvas.translate(_x, _y);
-    canvas.rotate(tau * _turn);
-    var white = Paint()..color = const Color(0xffffffff);
-    var size = 200.0;
-    canvas.drawRect(Rect.fromLTWH(-size / 2, -size / 2, size, size), white);
-    canvas.restore();
-  }
-
-  void update(double t) {
-    var rotationsPerSecond = 0.25;
-    _turn += t * rotationsPerSecond;
   }
 }
