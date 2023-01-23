@@ -1,16 +1,9 @@
-# space_colonization_algorithm
+# Flutter (dart) implementation of Space Colonization Algorithm  
 
-A new Flutter project.
+A primitive implementation of the Space Colonization Algorithm http://algorithmicbotany.org/papers/colonization.egwnp2007.pdf
 
-## Getting Started
+An example of the result of program execution
 
-This project is a starting point for a Flutter application.
+![execution result](result.png)
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+In addition to the original algorithm proposed by its authors, the parameter "persistence" was added. It determines how bendable the newly created piece of the tree branch is.

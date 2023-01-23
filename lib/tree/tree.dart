@@ -10,6 +10,7 @@ const int leavesNumber = 5000;
 const double influenceDistance = 200.0;
 const double killDistance = 20;
 const double len = 10;
+const double persistance = 0.7;
 
 class Tree {
   final Rect crownBounds;
@@ -68,7 +69,7 @@ class Tree {
       Offset dir = leaves.fold<Offset>(const Offset(0, 0),
           (dir, leaf) => dir + (leaf.pos - branch.pos) / (leaf.pos - branch.pos).distance);
       dir = dir / dir.distance;
-      dir = Offset.lerp(dir, branch.dir, 0.7)!;
+      dir = Offset.lerp(dir, branch.dir, persistance)!;
       branches.add(Branch(pos: branch.pos + dir * len, parent: branch, dir: dir));
     });
 
